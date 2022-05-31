@@ -1,3 +1,4 @@
+import AppError from "../../../../shared/AppError";
 import { User } from "../../model/User";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 
@@ -11,7 +12,11 @@ class TurnUserAdminUseCase {
   execute({ user_id }: IRequest): User {
     const user = this.usersRepository.findById(user_id);
     if (!user) {
-      throw new Error("User not found");
+      throw new AppError({
+        error: "User not found",
+        statusCode: 404,
+        category: "USER_NOT_FOUND",
+      });
     }
     user.admin = true;
     return user;

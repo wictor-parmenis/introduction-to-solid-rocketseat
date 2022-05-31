@@ -1,5 +1,3 @@
-import { v4 as uuidV4 } from "uuid";
-
 import { User } from "../../model/User";
 import { IUsersRepository, ICreateUserDTO } from "../IUsersRepository";
 
@@ -21,14 +19,12 @@ class UsersRepository implements IUsersRepository {
   }
 
   create({ name, email }: ICreateUserDTO): User {
-    const user: User = {
-      id: uuidV4(),
+    const user = new User();
+
+    Object.assign(user, {
       name,
       email,
-      admin: false,
-      created_at: new Date(),
-      updated_at: new Date(),
-    };
+    });
 
     this.users.push(user);
 

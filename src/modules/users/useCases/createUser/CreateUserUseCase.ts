@@ -1,3 +1,4 @@
+import AppError from "../../../../shared/AppError";
 import { User } from "../../model/User";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 
@@ -10,11 +11,15 @@ class CreateUserUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
   execute({ email, name }: IRequest): User {
-    const user = this.usersRepository.create({ email, name });
     const userAlreadyExist = this.usersRepository.findByEmail(email);
     if (userAlreadyExist) {
-      throw new Error("User already exist");
+      throw new AppError({
+        error: "User already exist",
+        statusCode: 400,
+        category: "USER_ALREADY_EXIST",
+      });
     }
+    const user = this.usersRepository.create({ email, name });
     return user;
   }
 }
