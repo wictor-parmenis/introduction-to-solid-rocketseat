@@ -1,6 +1,8 @@
 import "express-async-errors";
 import express, { NextFunction, Request, Response } from "express";
+import swaggerUi from "swagger-ui-express";
 
+import swaggerFile from "../swagger.json";
 import { usersRoutes } from "./routes/users.routes";
 import AppError from "./shared/AppError";
 
@@ -8,6 +10,7 @@ const app = express();
 
 app.use(express.json());
 
+app.use("/docs/v1", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use("/users", usersRoutes);
 
 app.use(
